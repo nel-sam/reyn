@@ -1,2 +1,52 @@
-@import 'tailwindcss';
-@import 'uniwind';
+@import "tailwindcss";
+@import "uniwind";
+
+@layer theme {
+	:root {
+		@variant light {
+			--color-background: #f7f8fc;
+			--color-surface: #ffffff;
+			--color-foreground: #172033;
+			--color-foreground-secondary: #64748b;
+			--color-foreground-muted: #94a3b8;
+			--color-primary: #3157d5;
+			--color-primary-strong: #2342a5;
+			--color-primary-foreground: #ffffff;
+			--color-primary-subtle: #e0e7ff;
+			--color-primary-subtle-foreground: #3157d5;
+			--color-primary-soft: #eef2ff;
+			--color-border: #e2e8f0;
+			--color-border-subtle: #eef1ef;
+			--color-neutral-subtle: #f1f5f9;
+			--color-neutral-foreground: #475569;
+			--color-danger: #c2413a;
+			--color-danger-subtle: #fff5f3;
+			--color-danger-border: #f0d9d6;
+			--color-sponsor-icon: #f9e7b0;
+			--color-tip-foreground: #c7d2fe;
+		}
+
+		@variant dark {
+			--color-background: #0f172a;
+			--color-surface: #172033;
+			--color-foreground: #f8fafc;
+			--color-foreground-secondary: #cbd5e1;
+			--color-foreground-muted: #94a3b8;
+			--color-primary: #818cf8;
+			--color-primary-strong: #a5b4fc;
+			--color-primary-foreground: #0f172a;
+			--color-primary-subtle: #312e81;
+			--color-primary-subtle-foreground: #c7d2fe;
+			--color-primary-soft: #1e293b;
+			--color-border: #334155;
+			--color-border-subtle: #263449;
+			--color-neutral-subtle: #1e293b;
+			--color-neutral-foreground: #cbd5e1;
+			--color-danger: #f87171;
+			--color-danger-subtle: #3f1d24;
+			--color-danger-border: #7f1d1d;
+			--color-sponsor-icon: #f9e7b0;
+			--color-tip-foreground: #e0e7ff;
+		}
+	}
+}

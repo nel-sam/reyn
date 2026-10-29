@@ -1,13 +1,15 @@
-import { View, Image, useWindowDimensions, Text, Pressable } from "react-native";
+import { View, Image, useWindowDimensions } from "react-native";
 import { GestureDetector, useCompetingGestures, usePanGesture, useTapGesture } from "react-native-gesture-handler";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import AppButton from "./shared/app-button";
-import { useState } from "react";
+import { AppButton } from "./shared/app-button";
+import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 export default function Rainer() {
   const image = require("../../../assets/USD_100.jpg");
@@ -15,7 +17,16 @@ export default function Rainer() {
   const translateY = useSharedValue(0);
   const dismissed = useSharedValue(false);
   const isActivated = useSharedValue(false);
+  const fadeInOpacity = useSharedValue(0);
   const [showSettingsButton, setShowSettingsButton] = useState(false);
+
+  useEffect(() => {
+    console.log(showSettingsButton); // TODO: remove
+    if (showSettingsButton)
+      fadeInButton();
+    else
+      fadeOutButton();
+  }, [showSettingsButton]);
 
   const pan = usePanGesture({
     onActivate: () => {
@@ -54,10 +65,23 @@ export default function Rainer() {
     }
   });
 
-  const gestures = useCompetingGestures(tap,pan);
+  const gestures = useCompetingGestures(tap, pan);
 
+  // Dollar bill movement
   const yMovementStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }, { scale: isActivated.value ? 0.90 : 1 }],
+  }));
+
+  const fadeInButton = () => {
+    fadeInOpacity.value = withTiming(1, { duration: 300, easing: Easing.linear });
+  };
+
+  const fadeOutButton = () => {
+    fadeInOpacity.value = withTiming(0, { duration: 300, easing: Easing.linear });
+  };
+
+  const opacityAnimation = useAnimatedStyle(() => ({
+    opacity: fadeInOpacity.value
   }));
 
   return (
@@ -76,7 +100,9 @@ export default function Rainer() {
         </Animated.View>
       </GestureDetector>
 
-      {showSettingsButton && <AppButton text="Settings" onPress={() => { }} />}
+      <Animated.View className={'absolute bottom-4 w-full flex-row justify-center'} style={opacityAnimation}>
+        <AppButton variant="primary" label="" icon="settings" onPress={() => { router.push('./components/settings') }} />
+      </Animated.View>
     </View>
   );
 }

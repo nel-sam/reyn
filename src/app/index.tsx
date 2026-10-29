@@ -4,9 +4,12 @@ import Rainer from './components/rainer';
 import './../global.css';
 import { GestureDetector, useTapGesture } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
+import { useUniwind } from 'uniwind';
+import { Stack } from 'expo-router';
 
 export default function App() {
   const showSettingsButton = useSharedValue(false);
+  const { theme } = useUniwind();
 
   const tap = useTapGesture({
     onActivate: () => {
@@ -15,12 +18,19 @@ export default function App() {
   });
 
   return (
-    <GestureDetector gesture={tap}>
-      <View className={'justify-center align-center'} style={styles.container}>
-        <Rainer />
-        <StatusBar hidden />
-      </View>
-    </GestureDetector>
+    <>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          title: 'Reyn'
+        }}
+      />
+      <GestureDetector gesture={tap}>
+        <View className={'justify-center align-center'} style={styles.container}>
+          <Rainer />
+          <StatusBar hidden style={theme === "dark" ? "light" : "dark"} />
+        </View>
+      </GestureDetector></>
   );
 }
 
