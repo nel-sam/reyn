@@ -10,18 +10,31 @@ Expo ships breaking changes every SDK release. APIs you remember are likely rena
 
 ## Commands
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+This repository currently uses npm (`package-lock.json` is present). Use `npx` for Expo commands; if the package manager changes, follow its lockfile (`bun.lock` means use `bunx`).
 
 ```bash
 npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
+npm run start               # start the dev server
+npm run ios                 # start on iOS
+npm run android             # start on Android
+npm run web                 # start on web
+npx expo lint               # lint (when supported by the installed Expo CLI)
 npx tsc --noEmit            # typecheck
 npx expo-doctor             # diagnose dependency and config issues
 npx expo install --fix      # fix incompatible package versions
 ```
 
-Run lint and typecheck before declaring any task done.
+The package scripts currently expose start, ios, android, and web; there is no dedicated test script. Run lint and typecheck before declaring a code task done.
+
+## Project Structure and Current Patterns
+
+- `src/app/` is the Expo Router route directory. `index.tsx` is the root screen and `_layout.tsx` defines the root stack. Typed routes are enabled in `app.json`.
+- `src/app/_layout.tsx` wraps the router stack in `GestureHandlerRootView`; screens use a headerless stack by default.
+- The root screen in `src/app/index.tsx` currently renders `Rainer` and the Expo status bar. It imports `src/global.css` for the Tailwind CSS v4 and Uniwind setup.
+- The current feature component lives at `src/app/components/rainer.tsx`. It displays `assets/USD_1.jpg` full-screen and uses React Native Gesture Handler with Reanimated shared values/styles for an upward swipe-to-dismiss interaction. Keep animation work on the UI thread through Reanimated; this component currently dismisses after a swipe of about 40% of screen height or an upward velocity above 800, otherwise springing back.
+- Keep route files in `src/app/`. The existing feature component is colocated under `src/app/components/`; place new generally reusable components, hooks, and utilities outside the route directory as the project grows so they are not treated as routes.
+- Styling currently mixes React Native `StyleSheet`/inline styles with the global Tailwind/Uniwind CSS setup. Follow the style already used by the component being changed rather than introducing another styling system.
+- Expo SDK is 58, React Native is 0.88, and React is 19. Before using Expo or React Native APIs, check the matching versioned Expo docs as described above.
 
 ## Navigation & Routing
 

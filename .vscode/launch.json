@@ -5,12 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-        "name": "Mobile: Expo (iOS Dev Client, Device)",
-        "type": "node-terminal",
-        "request": "launch",
-        "command": "npx expo run:ios --device",
-        "cwd": "${workspaceFolder}",
-        "preLaunchTask": "mobile: prep ios dev client"
+            "name": "Mobile: Expo (iOS Dev Client, Device)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npx expo run:ios --device '대дрíん'",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "mobile: prep ios dev client"
+        },
+        {
+            "name": "Mobile: Expo (Android Dev Client)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run expo:dev:android",
+            "cwd": "${workspaceFolder}/mobile",
+            "preLaunchTask": "mobile: prep android dev client"
+        },
+        {
+            "name": "Mobile: Expo (iOS Dev Client, Simulator)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run expo:dev:ios:simulator",
+            "cwd": "${workspaceFolder}/mobile",
+            "preLaunchTask": "mobile: prep ios dev client"
         },
     ]
 }

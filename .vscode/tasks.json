@@ -9,5 +9,14 @@
       "dependsOrder": "sequence",
       "problemMatcher": []
     },
+    {
+      "label": "mobile: prep android dev client",
+      "dependsOn": [
+        "expo: prebuild android (local)",
+        "adb: reverse ports (Mobile)"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
   ]
 }
