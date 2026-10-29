@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "mobile: prep ios dev client",
+      "dependsOn": [
+        "expo: prebuild ios"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+  ]
+}
