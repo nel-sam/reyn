@@ -76,7 +76,7 @@ export default function Rainer() {
         const interval = setInterval(() => {
           if (isAutoSwipingShared.value && !dismissed.value) {
             dismissed.value = true;
-            translateY.value = withTiming(-height, { duration: 200 }, (finished) => {
+            translateY.value = withTiming(-height, { duration: 300 }, (finished) => {
               if (finished) {
                 whiteFlashOpacity.value = withTiming(1, { duration: 50 }, () => {
                   whiteFlashOpacity.value = withTiming(0, { duration: 150 });
@@ -168,14 +168,14 @@ export default function Rainer() {
     <>
       <View style={{ flex: 1 }}>
         <Animated.Text 
-          className={'absolute top-1/2 left-1/2 font-extrabold text-red-600 z-10'} 
+          className={'absolute top-1/2 left-1/2 p-1 font-extrabold text-red-600 z-10 '} 
           style={[
             { 
-              fontSize: Math.max(40, 76 - (billCount * 2)),
+              fontSize: Math.max(55, 86 - billCount),
               textAlign: 'center',
               transform: [{translateX: -100}, {translateY: -60}],
-              textShadowColor: 'rgba(0, 0, 0, 0.3)',
-              textShadowOffset: { width: 2, height: 2 },
+              textShadowColor: 'rgba(254, 242, 195, 0.9)',
+              textShadowOffset: { width: 6, height: 6 },
               textShadowRadius: 4,
             }, 
             counterOpacityStyle
@@ -190,7 +190,7 @@ export default function Rainer() {
         />
         <GestureDetector gesture={gestures}>
           <Animated.View style={[{ height, width }, yMovementStyle]}>
-            <Image source={imageSource} style={{ height, width }} />
+            <Image source={imageSource} style={{ height, width }} className="border-8 border-white border-solid rounded-2xl" />
           </Animated.View>
         </GestureDetector>
 
