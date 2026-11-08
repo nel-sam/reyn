@@ -10,18 +10,28 @@ import Animated, {
 import { AppButton } from "./shared/app-button";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
+import { useDenomination } from "../_layout";
 
 export default function Rainer() {
-  const image = require("../../../assets/USD_100.jpg");
+  const { denomination } = useDenomination();
   const { height, width } = useWindowDimensions();
   const translateY = useSharedValue(0);
   const dismissed = useSharedValue(false);
   const isActivated = useSharedValue(false);
   const fadeInOpacity = useSharedValue(0);
+  const whiteFlashOpacity = useSharedValue(0);
   const [showSettingsButton, setShowSettingsButton] = useState(false);
 
+  let imageSource = require("../../../assets/USD_100.jpg");
+
+  if (denomination === "$1")
+    imageSource = require("../../../assets/USD_1.jpg");
+  else if (denomination === "10€")
+    imageSource = require("../../../assets/EUR_10.png");
+  else if (denomination === "100€")
+    imageSource = require("../../../assets/EUR_100.png");
+
   useEffect(() => {
-    console.log(showSettingsButton); // TODO: remove
     if (showSettingsButton)
       fadeInButton();
     else
@@ -45,6 +55,10 @@ export default function Rainer() {
         dismissed.value = true;
         translateY.value = withTiming(-height, { duration: 150 }, (finished) => {
           if (finished) {
+            whiteFlashOpacity.value = withTiming(1, { duration: 50 }, () => {
+              whiteFlashOpacity.value = withTiming(0, { duration: 150 });
+            });
+
             translateY.value = 0;
             isActivated.value = false;
             dismissed.value = false;
@@ -84,25 +98,38 @@ export default function Rainer() {
     opacity: fadeInOpacity.value
   }));
 
-  return (
-    <View style={{ flex: 1 }}>
-      <Image
-        source={image}
-        className={'absolute top-0 left-0'}
-        style={{ height, width }}
-      />
-      <GestureDetector gesture={gestures}>
-        <Animated.View style={[{ height, width }, yMovementStyle]}>
-          <Image
-            source={image}
-            style={{ height, width }}
-          />
-        </Animated.View>
-      </GestureDetector>
+  const whiteFlashStyle = useAnimatedStyle(() => ({
+    opacity: whiteFlashOpacity.value,
+  }));
 
-      <Animated.View className={'absolute bottom-4 w-full flex-row justify-center'} style={opacityAnimation}>
-        <AppButton variant="primary" label="" icon="settings" onPress={() => { router.push('./components/settings') }} />
-      </Animated.View>
-    </View>
-  );
+  return (
+    <>
+
+
+      <View style={{ flex: 1 }}>
+
+        <Image
+          source={imageSource}
+          className={'absolute top-0 left-0'}
+          style={{ height, width }}
+        />
+        <GestureDetector gesture={gestures}>
+          <Animated.View style={[{ height, width }, yMovementStyle]}>
+            <Image
+              source={imageSource}
+              style={{ height, width }}
+            />
+          </Animated.View>
+        </GestureDetector>
+
+        <Animated.View className={'absolute bottom-4 w-full flex-row justify-center'} style={opacityAnimation}>
+          <AppButton variant="primary" label="" icon="settings" onPress={() => { router.push('./components/settings') }} />
+        </Animated.View>
+      </View>
+      <Animated.View
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={[{ backgroundColor: 'white' }, whiteFlashStyle]}
+      />
+
+    </>);
 }
