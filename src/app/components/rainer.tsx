@@ -2,6 +2,7 @@ import { View, Image, useWindowDimensions } from "react-native";
 import { GestureDetector, useCompetingGestures, usePanGesture, useTapGesture } from "react-native-gesture-handler";
 import Animated, {
   Easing,
+  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -21,6 +22,8 @@ export default function Rainer() {
   const fadeInOpacity = useSharedValue(0);
   const whiteFlashOpacity = useSharedValue(0);
   const [showSettingsButton, setShowSettingsButton] = useState(false);
+  const [isAutoSwiping, setIsAutoSwiping] = useState(false);
+  const isAutoSwipingShared = useSharedValue(false);
 
   let imageSource = require("../../../assets/USD_100.jpg");
 
@@ -37,6 +40,35 @@ export default function Rainer() {
     else
       fadeOutButton();
   }, [showSettingsButton]);
+
+  useEffect(() => {
+    isAutoSwipingShared.value = isAutoSwiping;
+  }, [isAutoSwiping]);
+
+  useAnimatedReaction(
+    () => isAutoSwipingShared.value,
+    (autoSwiping) => {
+      if (autoSwiping) {
+        const interval = setInterval(() => {
+          if (isAutoSwipingShared.value && !dismissed.value) {
+            dismissed.value = true;
+            translateY.value = withTiming(-height, { duration: 200 }, (finished) => {
+              if (finished) {
+                whiteFlashOpacity.value = withTiming(1, { duration: 50 }, () => {
+                  whiteFlashOpacity.value = withTiming(0, { duration: 150 });
+                });
+                translateY.value = 0;
+                isActivated.value = false;
+                dismissed.value = false;
+              }
+            });
+          }
+        }, 200);
+
+        return () => clearInterval(interval);
+      }
+    }
+  );
 
   const pan = usePanGesture({
     onActivate: () => {
@@ -73,7 +105,7 @@ export default function Rainer() {
   });
 
   const tap = useTapGesture({
-    runOnJS: true, // keeps the pan animation on the UI thread while letting the tap update React state.
+    runOnJS: true,
     onDeactivate: () => {
       setShowSettingsButton(prev => !prev);
     }
@@ -104,10 +136,7 @@ export default function Rainer() {
 
   return (
     <>
-
-
       <View style={{ flex: 1 }}>
-
         <Image
           source={imageSource}
           className={'absolute top-0 left-0'}
@@ -115,21 +144,30 @@ export default function Rainer() {
         />
         <GestureDetector gesture={gestures}>
           <Animated.View style={[{ height, width }, yMovementStyle]}>
-            <Image
-              source={imageSource}
-              style={{ height, width }}
-            />
+            <Image source={imageSource} style={{ height, width }} />
           </Animated.View>
         </GestureDetector>
 
-        <Animated.View className={'absolute bottom-4 w-full flex-row justify-center'} style={opacityAnimation}>
-          <AppButton variant="primary" label="" icon="settings" onPress={() => { router.push('./components/settings') }} />
+        <Animated.View className={'absolute bottom-4 w-full flex-row justify-center gap-4'} style={opacityAnimation}>
+          <AppButton
+            variant="primary"
+            label=""
+            icon="settings"
+            onPress={() => { router.push('./components/settings') }}
+          />
+
+          <AppButton
+            variant="primary"
+            label=""
+            icon={isAutoSwiping ? "pause" : "play"}
+            onPress={() => setIsAutoSwiping(prev => !prev)}
+          />
+
         </Animated.View>
       </View>
       <Animated.View
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={[{ backgroundColor: 'white' }, whiteFlashStyle]}
       />
-
     </>);
 }
