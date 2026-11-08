@@ -16,16 +16,16 @@
             "name": "Mobile: Expo (Android Dev Client)",
             "type": "node-terminal",
             "request": "launch",
-            "command": "npm run expo:dev:android",
-            "cwd": "${workspaceFolder}/mobile",
+            "command": "npm run android",
+            "cwd": "${workspaceFolder}",
             "preLaunchTask": "mobile: prep android dev client"
         },
         {
             "name": "Mobile: Expo (iOS Dev Client, Simulator)",
             "type": "node-terminal",
             "request": "launch",
-            "command": "npm run expo:dev:ios:simulator",
-            "cwd": "${workspaceFolder}/mobile",
+            "command": "npm run ios",
+            "cwd": "${workspaceFolder}",
             "preLaunchTask": "mobile: prep ios dev client"
         },
     ]
