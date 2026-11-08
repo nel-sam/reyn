@@ -1,4 +1,4 @@
-import { View, Image, useWindowDimensions } from "react-native";
+import { View, Image, useWindowDimensions, Text } from "react-native";
 import { GestureDetector, useCompetingGestures, usePanGesture, useTapGesture } from "react-native-gesture-handler";
 import Animated, {
   Easing,
@@ -23,16 +23,33 @@ export default function Rainer() {
   const whiteFlashOpacity = useSharedValue(0);
   const [showSettingsButton, setShowSettingsButton] = useState(false);
   const [isAutoSwiping, setIsAutoSwiping] = useState(false);
+  const [billCount, setBillCount] = useState(0);
   const isAutoSwipingShared = useSharedValue(false);
+  const billCountRef = useSharedValue(0);
+
+  useEffect(() => {
+    setBillCount(0);
+    billCountRef.value = 0;
+  }, [denomination]);
 
   let imageSource = require("../../../assets/USD_100.jpg");
+  let denominationMarker = "$";
+  let denominationValue = 100;
 
-  if (denomination === "$1")
+  if (denomination === "$1") {
     imageSource = require("../../../assets/USD_1.jpg");
-  else if (denomination === "10€")
+    denominationValue = 1;
+  }
+  else if (denomination === "10€") {
     imageSource = require("../../../assets/EUR_10.png");
-  else if (denomination === "100€")
+    denominationMarker = "€";
+    denominationValue = 10;
+  }
+  else if (denomination === "100€") {
     imageSource = require("../../../assets/EUR_100.png");
+    denominationMarker = "€";
+    denominationValue = 100;
+  }
 
   useEffect(() => {
     if (showSettingsButton)
@@ -40,6 +57,13 @@ export default function Rainer() {
     else
       fadeOutButton();
   }, [showSettingsButton]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBillCount(billCountRef.value);
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     isAutoSwipingShared.value = isAutoSwiping;
@@ -57,6 +81,7 @@ export default function Rainer() {
                 whiteFlashOpacity.value = withTiming(1, { duration: 50 }, () => {
                   whiteFlashOpacity.value = withTiming(0, { duration: 150 });
                 });
+                billCountRef.value += 1;
                 translateY.value = 0;
                 isActivated.value = false;
                 dismissed.value = false;
@@ -91,6 +116,7 @@ export default function Rainer() {
               whiteFlashOpacity.value = withTiming(0, { duration: 150 });
             });
 
+            billCountRef.value += 1;
             translateY.value = 0;
             isActivated.value = false;
             dismissed.value = false;
@@ -134,9 +160,29 @@ export default function Rainer() {
     opacity: whiteFlashOpacity.value,
   }));
 
+  const counterOpacityStyle = useAnimatedStyle(() => ({
+    opacity: isActivated.value || isAutoSwipingShared.value ? 1 : 0,
+  }));
+
   return (
     <>
       <View style={{ flex: 1 }}>
+        <Animated.Text 
+          className={'absolute top-1/2 left-1/2 font-extrabold text-red-600 z-10'} 
+          style={[
+            { 
+              fontSize: Math.max(40, 76 - (billCount * 2)),
+              textAlign: 'center',
+              transform: [{translateX: -100}, {translateY: -60}],
+              textShadowColor: 'rgba(0, 0, 0, 0.3)',
+              textShadowOffset: { width: 2, height: 2 },
+              textShadowRadius: 4,
+            }, 
+            counterOpacityStyle
+          ]}
+        >
+          {denominationMarker}{(billCount * denominationValue).toLocaleString()}
+        </Animated.Text>
         <Image
           source={imageSource}
           className={'absolute top-0 left-0'}
