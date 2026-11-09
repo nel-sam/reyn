@@ -56,3 +56,4 @@ Docs: https://docs.expo.dev/eas/index.md
 ## Coding standards
 
 - Always use brackets around single line if, for, while, blocks and similar blocks
+- runOnJS has been deprecated so use scheduleOnRN instead when wanting to execute on the RN Runtime.

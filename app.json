@@ -11,9 +11,12 @@
       "typedRoutes": true
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.nrsdev.reyn",
-      "appleTeamId": "VZ9G5HAP87"
+      "appleTeamId": "VZ9G5HAP87",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +34,16 @@
     "plugins": [
       "expo-router",
       "expo-status-bar"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "0824e15c-ec1f-41f5-ad1a-cd071a76cabd"
+      }
+    }
   }
 }

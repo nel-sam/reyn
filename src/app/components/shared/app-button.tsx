@@ -46,7 +46,7 @@ export function AppButton({ label, onPress, icon, variant = "primary", disabled 
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
-      className={`h-14 min-w-50 max-w-80 flex-row items-center justify-center overflow-hidden rounded-2xl active:opacity-80 ${disabled ? "opacity-50" : ""} ${hasProgress ? "border border-primary bg-primary-soft" : variantClasses[variant]}`}
+      className={`h-14 min-w-30 max-w-80 flex-row items-center justify-center overflow-hidden rounded-2xl active:opacity-80 ${disabled ? "opacity-50" : ""} ${hasProgress ? "border border-primary bg-primary-soft" : variantClasses[variant]}`}
     >
       {progressPercent !== undefined ? (
         <View
