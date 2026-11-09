@@ -31,7 +31,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "v-up": "npm version patch",
+    "bump": "npm version patch && git checkout -b v$(node -p \"require('./package.json').version\")",
     "release": "eas build --platform all --profile production --auto-submit"
   },
   "private": true
