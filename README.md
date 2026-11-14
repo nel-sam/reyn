@@ -14,7 +14,7 @@ I made this app mainly to practice and learn some new animation techniques using
 
 ## Future for the app
 
-Linking between users via QR code would be a cool feature so you can direct the rain to a specific person. Eventually maybe even linking it to payment systems so that real money could be transfered.
+Linking between users via QR code would be a cool feature so you can direct the rain to a specific person. Eventually maybe even linking it to payment systems so that real money could be transferred.
 
 
 ## License notes
